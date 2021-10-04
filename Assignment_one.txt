@@ -1,0 +1,26 @@
+krupadhruva@voyager ~]$ pwd
+/home/student/krupadhruva
+[krupadhruva@voyager ~]$ ls
+cis18a  public_html
+[krupadhruva@voyager ~]$ # Unix utility programs or commands are used to execute specific tasks in a computer
+[krupadhruva@voyager ~]$ # 3 examples of Linux command names: "pwd", "ls", and "man"
+[krupadhruva@voyager ~]$ # Home directory: File system space provided by the operating system; used to store files etc.
+[krupadhruva@voyager ~]$ echo $HOME
+/home/student/krupadhruva
+[krupadhruva@voyager ~]$ # echo simply restates or echoes while $ extracts the value from the variable HOME
+[krupadhruva@voyager ~]$ man uname
+[krupadhruva@voyager ~]$ # uname is used to get information about the system; "uname -m": prints machine hardware name
+[krupadhruva@voyager ~]$ uname -m
+x86_64
+[krupadhruva@voyager ~]$ man hostname
+[krupadhruva@voyager ~]$ # hostname is used to show or set the hostname; "hostname": displays computer hostname
+[krupadhruva@voyager ~]$ hostname
+voyager.deanza.edu
+[krupadhruva@voyager ~]$ man who
+[krupadhruva@voyager ~]$ # who shows who all are logged in; "who": list of students that are logged in
+[krupadhruva@voyager ~]$ who
+krupadhruva pts/2        2021-09-27 21:26 (73.93.153.2)
+ngoclt   pts/3        2021-09-27 20:34 (73.93.155.84)
+muhammadkhan2002 pts/4        2021-09-27 22:31 (104-11-215-150.lightspeed.sntcca.sbcglobal.net)
+karenezhao pts/6        2021-09-27 22:39 (c-67-160-204-207.hsd1.ca.comcast.net)
+[krupadhruva@voyager ~]$
