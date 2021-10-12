@@ -1,0 +1,99 @@
+Question 1: Describe Symbolic and Hard link with an example.
+
+Symbolic link:
+    * Symbolic/soft link is a new file the points to another file NAME
+    * the new file and the file it is pointing to have different inode numbers (every new file has a unique inode number)
+    * A symbolic link can point to a nonexisting file
+    * Contents of a file can be read by reading the symbolic link
+
+    Example:
+        # Create a new file
+        $ echo some data > file.1
+
+        # Create a symbolic link 'sym.1' pointing to 'file.1'
+        $ ln -s file.1 sym.1
+
+        # List the files
+        $ ls -l file.1 sym.1
+        -rw-r--r--. 1 krupadhruva unixStudent 10 Oct 11 21:03 file.1
+        lrwxrwxrwx. 1 krupadhruva unixStudent  6 Oct 11 21:03 sym.1 -> file.1
+
+        # List the inode number of the files
+        $ ls -1i file.1 sym.1
+        805382597 file.1
+        805382621 sym.1
+
+        # Create symbolic link 'sym.2' poinitng to non-existing file 'nonexisting'
+        $ ln -s nonexisting sym.2
+
+        # List the files
+        $ ls -l nonexisting sym.2
+        ls: cannot access nonexisting: No such file or directory
+        lrwxrwxrwx. 1 krupadhruva unixStudent 11 Oct 11 21:04 sym.2 -> nonexisting
+
+        # Read contents of a file using symbolic file
+        $ cat file.1
+        some data
+
+        $ cat sym.1
+        some data
+
+Hard link:
+    * Hard link is NOT a new file, hence there is no new inode number; the file and hard link will have the same inode number
+    * A hard link cannot point to a nonexisting file
+    * Link count on a file indicates the number of hard links including itself
+
+    Example:
+        # Create a hard link to 'file.1' named 'hard.1'
+        $ ln file.1 hard.1
+
+        # List the files
+        $ ls -l file.1 hard.1
+        -rw-r--r--. 2 krupadhruva unixStudent 10 Oct 11 21:18 file.1
+        -rw-r--r--. 2 krupadhruva unixStudent 10 Oct 11 21:18 hard.1
+
+        # List the file and its hard link
+        $ ls -1i file.1 hard.1
+        805382597 file.1
+        805382597 hard.1
+
+        # Display link count of file and its hard link (second column: 2)
+        $ ls -l file.1 hard.1
+        -rw-r--r--. 2 krupadhruva unixStudent 10 Oct 11 21:18 file.1
+        -rw-r--r--. 2 krupadhruva unixStudent 10 Oct 11 21:18 hard.1
+
+        # Try creating a hard link to a non-existent file
+        $ ln nonexistent hard.2
+        ln: failed to access ‘nonexistent’: No such file or directory
+
+
+Question 2: Identify the various fields of information ls -l output gives for a file.
+(Referred: https://itectec.com/unixlinux/what-is-total-in-the-output-of-ls-command/ for 'total')
+
+In the following example:
+    $ ls -l
+    total 8
+    -rw-r--r--. 2 krupadhruva unixStudent 10 Oct 11 21:05 file.1
+    -rw-r--r--. 2 krupadhruva unixStudent 10 Oct 11 21:05 hard.1
+
+        total 8: Total blocks (same as ls -s)
+            $ ls -s
+            total 8
+            4 file.1  4 hard.1
+        -rw-r--r--.: File permissions (READ+WRITE for owner, READ for group, READ for others)
+        2: Link count
+        krupadhruva: Owner name
+        unixStudent: Group name
+        Oct 11 21:05: Modified time
+        file.1: File name
+
+
+Question 3: List any two file types available in Linux.
+
+* Regular text file:
+    $ file file.1
+    file.1: ASCII text
+
+* Symbolic link file:
+    $ file sym.1
+    sym.1: symbolic link to `file.1'
