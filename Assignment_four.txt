@@ -1,0 +1,48 @@
+1a. Find command for listing all directory files from home directory
+
+# listing all directories and files from home directory
+$ find ~
+
+# listing all directories from home directory
+$ find ~ -type d
+
+# listing all files from home directory
+$ find ~ -type f
+
+1b. List all files from system level device directory that are character special files
+
+# In Unix, device files are found under '/dev'
+$ find /dev -type c 
+
+2. Describe the cmds basename and dirname with an example each.
+
+# basename removes everything on the left side of the last '/' (inclusing the last '/')
+$ basename a/b/hi.txt
+hi.txt
+
+# It can also handle multiple paths
+$ basename -a a/b/hi.txt c/d/bye.txt
+hi.txt
+bye.txt
+
+# It can also remove a suffix string from the right most component
+$ basename a/b/hi.txt .txt
+hi
+
+# Alternate syntax for removing the suffix from the right most component
+$ basename -s .txt a/b/hi.txt
+hi
+
+# It can also handle multiple paths
+basename -s .txt -a a/b/hi.txt c/d/bye.txt
+hi
+bye
+
+# dirname removes everything AFTER the last '/' (including the last '/')
+$ dirname a/b/hi.txt
+a/b
+
+# It can also handle multiple paths
+$ dirname a/b/hi.txt c/d/bye.txt
+a/b
+c/d
