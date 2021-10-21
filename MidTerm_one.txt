@@ -1,0 +1,50 @@
+Question 1: Write a (ie one) cmd line to print the number of lines in the file /etc/passwd
+
+    # Preferred: wc can be used to show the number of lines in a file
+    $ wc -l /etc/passwd
+
+    # Alternate: nl prints the line number against each line and we take the last output (showing the total line count)
+    $ nl /etc/passwd | tail -1
+
+Question 2: List the names of any three Linux filters that you have used in Linux OS
+
+    1. paginating through a long file: less
+
+    Example: Paginate through file '.bashrc' in home directory
+    $ cat ~/.bashrc | less
+
+    2. Show first 'n' lines in a file: head
+
+    Example: Show top 10 lines  from file '.bashrc' in home directory
+    $ cat ~/.bashrc | head -10
+
+    3. Show last 'n' lines in a file: tail
+
+    Example: Show last 10 lines  from file '.bashrc' in home directory
+    $ cat ~/.bashrc | tail -10
+
+Question 3: Identify cmd name, options if any, arguments for the following cmd lines:
+
+    3a: ls -ld /tmp /usr/bin
+
+        cmd: ls
+        option 1: l
+        option 2: d
+        argument 1: /tmp
+        argument 2: /usr/bin
+
+    3b: cat /etc/passwd /etc/group
+
+        cmd: cat
+        argument 1: /etc/passwd
+        argument 2: /etc/group
+
+Question 4: Identify full pathname and relative pathname in the following:
+
+    4a: ../usr/bin
+
+        Relative pathname
+
+    4b: /home/student/john/project
+
+        Full pathname
