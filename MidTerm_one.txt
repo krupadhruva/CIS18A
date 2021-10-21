@@ -3,25 +3,22 @@ Question 1: Write a (ie one) cmd line to print the number of lines in the file /
     # Preferred: wc can be used to show the number of lines in a file
     $ wc -l /etc/passwd
 
-    # Alternate: nl prints the line number against each line and we take the last output (showing the total line count)
-    $ nl /etc/passwd | tail -1
-
 Question 2: List the names of any three Linux filters that you have used in Linux OS
 
     1. paginating through a long file: less
 
     Example: Paginate through file '.bashrc' in home directory
-    $ cat ~/.bashrc | less
+    $ less ~/.bashrc
 
     2. Show first 'n' lines in a file: head
 
     Example: Show top 10 lines  from file '.bashrc' in home directory
-    $ cat ~/.bashrc | head -10
+    $ head -10 ~/.bashrc
 
     3. Show last 'n' lines in a file: tail
 
     Example: Show last 10 lines  from file '.bashrc' in home directory
-    $ cat ~/.bashrc | tail -10
+    $ tail -10 ~/.bashrc
 
 Question 3: Identify cmd name, options if any, arguments for the following cmd lines:
 
