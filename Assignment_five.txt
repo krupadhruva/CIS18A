@@ -1,0 +1,88 @@
+Question 1: Describe the cmd chmod with an example
+
+'chmod' command is used to modify permissions on a file/directory for the owner, users in a group or the rest (others).
+
+Every file/directory in Unix supports 3 different actions
+    1. Read    (r): Reading contents of a file or listing contents of a directory
+    2. Write   (w): Modifying contents of a file or adding/deleting files/directories under a directory
+    3. Execute (x): Executing/running an executable file or make directory contents accessible/searchable
+
+Permissions on a file or directory are applicable to the following 3 entities:
+    1. Owner: For the owner (combination of read, write and execute)
+    2. Group: For all users part of the group (combination of read, write and execute)
+    3. Others: Anyone not part of #1 and #2 (combination of read, write and execute)
+
+'chmod' stands for 'change mode'. In Unix, permissions are described as permission mode bits
+    Read (r)    = 4 (3rd bit)
+    Write (w)   = 2 (2nd bit)
+    Execute (x) = 1 (1st bit)
+
+Since 'chmod' can be used to modify permissions for 3 sets (owner, group and others),
+the permission numbers/mnenomics are specified in groups of 3
+Example: 644 OR o=rw,g=r,o=r are equivalent forms of permissions
+
+Example:
+    # Created a file named 'chmod_example' with following permissions
+    # read+write for owner (krupadhruva), read for group (unixStudent) and read for all others
+    $ ls -l chmod_example
+    -rw-r--r--. 1 krupadhruva unixStudent 0 Oct 25 20:36 chmod_example
+
+    # Let us add write permission to group
+    $ chmod g+rw chmod_example
+    $ ls -l chmod_example
+    -rw-rw-r--. 1 krupadhruva unixStudent 0 Oct 25 20:36 chmod_example
+
+    # We can even set the read & write permission as follows
+    $ chmod g=rw chmod_example
+    $ ls -l chmod_example
+    -rw-rw-r--. 1 krupadhruva unixStudent 0 Oct 25 20:36 chmod_example
+
+    # The same permissions can be set using permission numbers too
+    $ chmod 664 chmod_example
+    [krupadhruva@voyager assignment_5]$ ls -l chmod_example
+    -rw-rw-r--. 1 krupadhruva unixStudent 0 Oct 25 20:36 chmod_example
+
+Question 2: Describe the cmd chown with an example
+
+'chown' command is used to change the ownership (owner and/or group) of a file/directory. Every file/directory
+in Unix has an owner. Owner is a valid user on the Unix system. The owner can belong to one or more groups.
+'chown' allows you to recusrively change ownership using '-R'. 
+
+Note: Once you transfer ownership, you lose permission cannot transfer it back yourself. The new owner will have
+to transfer it back to you.
+
+Example:
+    # Current user and group name
+    $ id
+    uid=27823(krupadhruva) gid=511(unixStudent) groups=511(unixStudent) context=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+
+    # Created a file named 'chown_example' with 'krupadhruva' as owner and 'unixStudent' group
+    $ ls -l chown_example
+    -rw-r--r--. 1 krupadhruva unixStudent 0 Oct 25 20:44 chown_example
+
+    # To change only the ownership of a file to 'alice' (do not use the additional ':group_name')
+    $ chown alice chown_example
+
+    # We can change the ownership of the file to a different owner and group
+    # If we want to transfer the ownership of file to 'alice' and group 'unixStudent'
+    $ chown alice:unixStudent chown_example
+
+
+Question 3: Describe the cmd chgrp. No example needed.
+
+'chgrp' command can be used to change the group ownership of a file or directory. every file/directory in Unix has an
+owner and a group defined as part of ownership. If we want to give access to a file or directory to users belonging to
+a different group, we can use the command 'chgrp'. Similar to other permission modifying commands like 'chown' and 'chmod',
+'chgrp' also supports changing group ownership recusrively using '-R' option.
+
+
+Question 4: What are permission numbers ? Describe.
+
+In Unix, permissions are described as permission mode bits (and stored as a number)
+    Read (r)    = 4 (3rd bit)
+    Write (w)   = 2 (2nd bit)
+    Execute (x) = 1 (1st bit)
+
+The mapping between the action (read, write or execute) and the numeric equivalent are generally called permission numbers
+In Unix, every file/directory will have a set of three numbers defining permissions the owner, users in a group and others
+have on the file/directory to perform the various actions (read, write or execute)
