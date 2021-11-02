@@ -1,0 +1,118 @@
+Question 1: Describe the cmd test with an example
+
+    'test' is a Unix command that can be used to check different conditional expressions.
+    The expressions can themselves contain numbers, strings or files along with appropriate
+    operators to form a meaningful expression. A non-zero exit code indicates test/check
+    failure (or expression is false). Zero exit code indicates test/check succeeded (true).
+    The result of 'test' is always treated as a Boolean with 2 possible results.
+
+    Examples of meaningful expressions (correct semantics):
+	* String: Check is string is empty or lexicographical comparision of strings
+	* Numeric: Compare 2 numbers for equality, greater than or less
+	* File: Checks against a file property for the given file, is file readable
+
+    Examples of incorrect semantics for expressions:
+	* Compare a string and number
+	* Compare string with a file
+
+    Usage example:
+	# Define 2 shell variables
+	$ str1='hello'
+	$ str2='world'
+
+	# Check for string equality
+	# Non-zero exit code implies strings are not equal
+	$ test $str1 = $str2
+	$ echo $?
+	1
+
+	# Test if str1 is empty
+	# Exit code 0 implies string is not empty
+	$ test -n $str1
+	$ echo $?
+	0
+
+	# Test if file is readable
+	# Exit code 0 implies file is readable for current logged in user
+	$ test -r /etc/passwd
+	$ echo $?
+	0
+
+Question 2: Describe the cmd expr with an example
+
+    'expr' is a Unix command that evaluates expressions. It can operate on string and
+    numeric values.
+
+    Some of the features of 'expr' command:
+	* Evaluates the expression and returns the result (not just a Boolean
+	  like 'test' performs a conditional check only)
+	* Can be used to perform different mathematical operations on integers and get the
+	  integer result
+	* When operating on strings, it supports common string operations equality check,
+	  and extends 'test' by supporting additional string operations length of string,
+	  extracting sub string and matching regular expressions.
+
+    Examples of using 'expr':
+	# Add 2 variables with numeric values
+	$ var1=1
+	$ var2=2
+	$ expr $var1 + $var2
+	3
+
+	# Find the length of a string
+	$ expr length "hello"
+	5
+
+	# Evaluating complex expressions require parenthesis and escaping with '\'
+	$ expr  \( 2 + 1 \) \* 3
+	9
+
+Question 3: What are shell variables. Describe briefly with example
+
+    * Variables are named place holders for storing values
+    * Variables give a convenient mechanism to store and retrieve values
+    * Higher level expressions and programs operate on value/data stored in variables
+
+    Properties specific to shell variables:
+	* Shell variables are variables that can be defined in a Unix shell
+	* Some shell variables are provided by the shell and their values cannot be modified
+	  like user defined variables. Example: $? (exit code of previous command).
+	  $0 is another shell builtin that stores the name of the shell.
+	* Shell variables are not typed (you can store either a numeric or string value).
+	  Variables store data as characters and it is the commands that interpret them
+	  as either strings or numbers.
+	* Value stored in a shell variable is referenced using the '$' symbol before the
+	  variable name
+
+    Examples of shell variables:
+    	# Display the name of shell (builtin shell variable)
+	$ echo $0
+	-bash
+
+	# Display the value stored in shell (environment) variable named HOME
+	$ echo $HOME
+	/home/student/krupadhruva
+
+	# User defined shell variable
+	$ str1='hello world'
+
+	# Display the string
+	$ echo $str1
+	hello world
+
+	# Overwrite the value stored in variable with a number
+	# Note: Shell variables do not have type, they store value as characters
+	$ str1=0
+
+	# Display the value in variable
+	$ echo $str1
+	0
+
+	# Setting the variable to empty value
+	$ str1=''
+
+	# Alternate method to set variable to empty value
+	$ str1=
+
+	# Undefining a variable
+	$ unset str1
