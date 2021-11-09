@@ -1,0 +1,112 @@
+Question 1: Describe shell globbing with an example
+
+    Unix commands taking path names (file or directory) as arguments require typing the
+    file path names as command arguments. Early Unix versions had command named 'glob' to
+    get list of file names based on wildcard patterns. Eventually, this functionality was
+    built into the shell to avoid having to call an external program 'glob'.
+
+    Wildcard patterns are strings with special meanings and are interpreted by the glob
+    implementation.
+
+    Some of the cases handled by glob are:
+    * List path names that end with '.txt' in the current directory
+    * List path names that start with upper case names
+    * List path names that matches a single character per pattern
+
+    # Sample tree structure (https://unix.stackexchange.com/a/127067)
+    $ tree --charset=ascii
+    .
+    |-- bar.c
+    |-- bar.cc
+    |-- bar.cpp
+    |-- bar.cxx
+    |-- bar.h
+    |-- dir1
+    |   |-- foo.c
+    |   |-- foo.cc
+    |   |-- foo.cpp
+    |   |-- foo.cxx
+    |   `-- foo.h
+    |-- dir2
+    |   |-- bar.c
+    |   |-- bar.cc
+    |   |-- bar.cpp
+    |   |-- bar.cxx
+    |   `-- bar.h
+    |-- foo.c
+    |-- foo.cc
+    |-- foo.cpp
+    |-- foo.cxx
+    `-- foo.h
+
+    Example to list files matching glob patterns:
+    # List path names that end with '.c' in current directory
+    $ echo *.c
+    bar.c foo.c
+
+    # List path names with 2 character extension
+    $ echo *.??
+    bar.cc foo.cc 
+
+    # List path names that start with any character between 'a' and 'e'
+    $ echo [a-d]*
+    bar.c bar.cc bar.cpp bar.cxx bar.h dir1 dir2 
+
+Question 2: Explain the shell globbing characters with an example each
+    a. *
+	'*' also called asterix when used as a shell glob pattern will match 0
+	or any number of characters in a path name
+
+	Example:
+	# List all path names
+	$ echo *
+	bar.c bar.cc bar.cpp bar.cxx bar.h dir1 dir2 foo.c foo.cc foo.cpp foo.cxx foo.h
+
+    b. ?
+	'?' when used as a shell glob pattern will match exactly 1 character in the path
+	name. For matching multiple counts, repeat '?' in the pattern.
+
+	Example:
+	# List path names with a single character extension (note: does not list files with '.cc' or '.cxx')
+	$ echo *.?
+	bar.c bar.h foo.c foo.h
+
+	# List path names with 2 character extension under directory names starting with 'dir'
+	$ echo dir*/*.??
+	dir1/foo.cc dir2/bar.cc
+
+    c. []
+	Any character specified inside enclosing square brackets is matched against the path name.
+	Enclosing square brackets support range based patterns. Ranges are specified with a starting
+	character followed by '-' (hyphen/minus) symbol and the end of range character. If the
+	starting character is '!' in enclosed square brackets, the match is negated.
+
+	The start and end range specifications should be semantically meaningful and correct, range
+	cannot be combination of starting English alphabet followed by ending numeric value ("[a-9]*").
+
+	Sample pattern:
+	[ABCD] means match first character in path name with any character in "ABCD" sequence
+
+	Sample range specifications:
+	[A-D0-3X-Z] translates to [ABCD0123XYZ]
+
+	Examples:
+	# Match all path names that start with 'a' or 'b' or 'c'
+	$ echo [abc]*
+	bar.c bar.cc bar.cpp bar.cxx bar.h
+
+	# Match all path names that start with 'a' or 'b' or 'c' using range
+	$ echo [a-c]*
+	bar.c bar.cc bar.cpp bar.cxx bar.h
+
+	# Match all path names that does not start with 'a' or 'b' or 'c'
+	$ echo [!abc]*
+	dir1 dir2 foo.c foo.cc foo.cpp foo.cxx foo.h
+
+	# Match all path names that does not start with 'a' or 'b' or 'c' using range
+	$ echo [!a-c]*
+	dir1 dir2 foo.c foo.cc foo.cpp foo.cxx foo.h
+
+References:
+    * man 7 glob
+    * glob man page on internet (https://man7.org/linux/man-pages/man7/glob.7.html)
