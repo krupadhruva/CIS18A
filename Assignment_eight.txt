@@ -1,0 +1,100 @@
+Question 1: Describe the cmd egrep with an example
+
+    * 'grep' and 'egrep' are Unix commands to search/match patterns in text.
+    * 'egrep' supports extended regular expressions (hence 'e' in the name)
+    where as 'grep' supports only the basic regular expression pattern.
+    * Extended regular expressions adds ranges. Ranges can be used to define
+    patterns that match a specific collection of characters.
+    
+    Example:
+    # Match a line that starts with lower case alphabet
+    $ echo 'hello WORLD' | egrep '^[a-z]+'
+    hello WORLD
+    # Match succeeds since the input starts with lower case alphabet 'h'
+    $ echo $?
+    0
+
+    # Match words (space or tab separated) with alphabets only
+    $ echo 'There are 12 eggs in a dozen' | egrep '^[a-zA-Z \t]+$'
+    # Match fails since there are digits/numbers
+    $ echo $?
+    1
+
+    # Match words (space or tab separated) with alphabets only
+    $ echo 'There are twleve eggs in a dozen' | egrep '^[a-zA-Z \t]+$'
+    There are twleve eggs in a dozen
+    # Matches since there only alphabets and spaces (word boundary)
+    $ echo $?
+    0
+
+    External references:
+    * https://en.wikipedia.org/wiki/Grep: History
+    * https://www.gnu.org/software/grep/manual/grep.html#Basic-vs-Extended: Basic and extended regular expression differences
+
+Question 2: Write test commands for the following
+
+    The 'test' command checks if the file or directory refered by the path name has
+    the desired permission. For executable, it checks for execute 'x' permission.
+    For writable, it changes for write 'w' permission. For readable, it checks read
+    'r' permission.
+
+    2a: to see whether /etc/shadow is writable
+	Unix command 'test' takes '-w' option to check if the path name argument
+	is writable (has write permission mode bit 'w' set)
+
+	$ test -w /etc/shadow
+	$ echo $?
+	1
+
+    2b: to see whether /usr/bin/passwd is an executable
+	Unix command 'test' takes '-x' option to check if the path name argument
+	is an executable (has execute permission mode bit 'x' set)
+
+	 $ test -x /usr/bin/passwd
+	 $ echo $?
+	 0
+
+Question 3: Describe the egrep meta characters  ^ (caret) and $ well.
+
+    Unix command 'egrep' supports matching input text against extended regular expression
+    patterns. Regular expression is a language/syntax with special meanings to certain
+    characters when used in pattern specification.
+
+    '^' and '$' (without the quotes) are referred to as anchor meta characters. Since these
+    characters are used to define positional information for matching the input text, they
+    anchor (hold onto a position as in a ship's anchor) a character set to a specific position.
+    They are called meta since they have a special meaning when used in the context of a regular
+    expression pattern.
+
+    '^' anchors to the begining of the input test
+    '$' anchors to the end of the input text
+
+    Note: '^' when used inside of a range in a pattern implies negation (like '!' in glob)
+
+    Examples:
+    # Match input starting with a number
+    $ echo '12 eggs make a dozen eggs' | egrep '^[0-9]+[a-zA-Z \t]+'
+    12 eggs make a dozen eggs
+    # Matches the input since it starts with digit/number
+    $ echo $?
+    0
+
+    # Match input ending with word in upper case alphabets
+    $ echo 'Capital of India is DELHI' | egrep ' [A-Z]+$'
+    Capital of India is DELHI
+    # Last word 'DELHI' is all in upper case
+    $ echo $?
+    0
+
+    # Match input that should not start with numeric
+    $ echo 'There are twleve eggs in a dozen' | egrep '^[^0-9]+'
+    There are twleve eggs in a dozen
+    # Matches since input does not start with digits/numbers
+    $ echo $?
+    0
+
+    # Match input that should not start with numeric
+    $ echo '12 eggs make a dozen eggs' | egrep '^[^0-9]+'
+    # Fails matching since input starts with digits/numeric
+    $ echo $?
+    1
