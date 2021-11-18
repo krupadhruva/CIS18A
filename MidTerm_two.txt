@@ -1,0 +1,135 @@
+Question 1: Write one cmd-line  for each of the following using chmod.
+
+    a. to set the permissions of the directory $HOME/ctmp to read only 
+    for user read and write for group and no perms for other. Do not use permission numbers
+    hint: set means use = 
+
+        # Setting permissions using literals (r=read, w=write, x=execute)
+        # Note: Clearing permissions is done by giving empty value following '='
+        $ chmod u=r,g=rw,o= $HOME/ctmp
+
+    b. to change permissions of $HOME/project from 755 to 441.  You are free to use permission numbers
+
+        # Setting permissions using numbers (read=4, write=2, execute=1)
+        $ chmod 441 $HOME/project
+
+        # Setting permissions using literals (r=read, w=write, x=execute)
+        $ chmod u=r,g=r,o=x project
+
+
+2. Describe the cmd "mv" with an example. No example ? no points. 
+No description ? then no points. 
+
+    "mv" is a Unix command that is used to move a file or directory. The command
+    takes 2 arguments, source and destination path.
+
+    Since the command changes the path/location of the file/directory argument,
+    following conditions should be satisfied for the command to succeed
+
+    * Source path should point to a file/directory
+    * Parent directory for destination path should exist. "mv" command does not
+    create parent directories if they are missing
+    * User should have write permission on the source and target parent directories
+    since "mv" command will remove the entry from the source parent directory and
+    write to the parent of the destination directory
+    * For moving files in special directory like '/tmp', if the destination file exists
+    and owned by a different user, the "mv" command will fail. This is to prevent
+    overwriting/clobbering a file owned by a different user in the shared '/tmp'
+    directory.
+
+    Reference: https://pubs.opengroup.org/onlinepubs/9699919799/utilities/mv.html
+
+    Example 1:
+    # Move a directory from one path to another
+    # Create a directory
+    $ mkdir src
+    $ ls
+    src
+
+    # Move directory 'src' to 'dest'
+    $ mv src dest
+
+    # 'src' is renamed to 'dest'
+    $ ls
+    dest
+
+    Example 2:
+    # Move a file into a directory
+    # Create a file
+    $ touch foo
+    $ ls
+    dest  foo
+
+    # Move 'foo' under 'dest'
+    $ mv foo dest
+    # Notice file 'foo' is under directory 'dest'
+    $ find .
+    .
+    ./dest
+    ./dest/foo
+
+    Example 3:
+    # Move file over existing file
+    # Create 2 files
+    $ touch foo bar
+    $ ls -i
+    809597009 bar   17339584 dest  809597008 foo
+
+    # Move file 'foo' and overwrite 'bar'
+    $ mv foo bar
+
+    # Notice the inode number of 'foo' is retained after the move/rename to 'bar'
+    $ ls -i
+    809597008 bar   17339584 dest
+
+    Example 4:
+    # "mv" command supports a special case where it can move multiple files
+    # into a single directory. The last argument to "mv" command must be a
+    # directory and that is used as the move destination
+
+    # Create a few files
+    $ touch foo bar foobar
+
+    # Create the destination directory
+    $ mkdir dest
+
+    # List the contents before move
+    $ ls -CF
+    bar  dest/  foo  foobar
+
+    # Move 3 files under destination 'dest' directory
+    $ mv foo bar foobar dest
+    # List the state after the move
+    $ find .
+    .
+    ./dest
+    ./dest/foo
+    ./dest/bar
+    ./dest/foobar
+
+
+3. How will you cp the directory  $HOME/homework to $HOME/project/homework ? Write the cmd line
+hint: use -r 
+
+      # Paths $HOME/homework and $HOME/project should both exist for the command
+      # to succeed
+      $ cp -r $HOME/homework $HOME/project/homework
+
+
+4. Write one find cmd for each of the following
+
+    a. find all files from /tmp directory which have been modified in the past three days.
+
+       # Find all files under '/tmp' modified before 3 days
+       $ find /tmp -type f -mtime +3
+
+       # Find all files/directories under '/tmp' modified before 3 days
+       $ find /tmp -mtime +3
+
+    b. find all files from $HOME which have a inode number of  800.
+
+       # Listing only files under $HOME whose inode number is 800
+       $ find $HOME -type f -inum 800
+
+       # Listing files/directories under $HOME whose inode number is 800
+       $ find $HOME -inum 800
