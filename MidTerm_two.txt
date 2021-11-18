@@ -17,16 +17,17 @@ Question 1: Write one cmd-line  for each of the following using chmod.
         $ chmod u=r,g=r,o=x project
 
 
-2. Describe the cmd "mv" with an example. No example ? no points. 
+Question 2: Describe the cmd "mv" with an example. No example ? no points. 
 No description ? then no points. 
 
     "mv" is a Unix command that is used to move a file or directory. The command
-    takes 2 arguments, source and destination path.
+    takes 2 or more arguments and the last argument serves as the destination/target
+    and the rest serve as source.
 
     Since the command changes the path/location of the file/directory argument,
     following conditions should be satisfied for the command to succeed
 
-    * Source path should point to a file/directory
+    * Source path(s) should point to a file/directory
     * Parent directory for destination path should exist. "mv" command does not
     create parent directories if they are missing
     * User should have write permission on the source and target parent directories
@@ -35,7 +36,9 @@ No description ? then no points.
     * For moving files in special directory like '/tmp', if the destination file exists
     and owned by a different user, the "mv" command will fail. This is to prevent
     overwriting/clobbering a file owned by a different user in the shared '/tmp'
-    directory.
+    directory
+    * When more than 2 arguments (paths) are specified, the last path has to be
+    an existing directory
 
     Reference: https://pubs.opengroup.org/onlinepubs/9699919799/utilities/mv.html
 
@@ -83,9 +86,8 @@ No description ? then no points.
     809597008 bar   17339584 dest
 
     Example 4:
-    # "mv" command supports a special case where it can move multiple files
-    # into a single directory. The last argument to "mv" command must be a
-    # directory and that is used as the move destination
+    # "mv" command supports moving multiple files into a destination directory
+    # The last argument to "mv" command must be a directory and serves as destination
 
     # Create a few files
     $ touch foo bar foobar
@@ -108,7 +110,7 @@ No description ? then no points.
     ./dest/foobar
 
 
-3. How will you cp the directory  $HOME/homework to $HOME/project/homework ? Write the cmd line
+Question 3: How will you cp the directory  $HOME/homework to $HOME/project/homework ? Write the cmd line
 hint: use -r 
 
       # Paths $HOME/homework and $HOME/project should both exist for the command
@@ -116,7 +118,7 @@ hint: use -r
       $ cp -r $HOME/homework $HOME/project/homework
 
 
-4. Write one find cmd for each of the following
+Question 4. Write one find cmd for each of the following
 
     a. find all files from /tmp directory which have been modified in the past three days.
 
