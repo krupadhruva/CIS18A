@@ -1,0 +1,51 @@
+Write cmd lines for the following.
+
+Question 1: Display lines that begin with upper case and end with lower case among the lines in a text file. Use any filename your your answer.
+
+	 # Using 'egrep' with an extended regular expression pattern to match lines that start with upper case '^[A-Z]'
+	 # followed by 0 or more characters '.*' and ends with lower case '[a-z]$'
+	 $ egrep "^[A-Z].*[a-z]$" /etc/motd
+	 De Anza College          CIS Department          ATC Computer System
+
+Question 2: Display shell programming scripts in  /etc/init.d
+
+	 # Using Unix command 'file' to detect the file type (misses files without shell interpreter in first line)
+	 $ find /etc/init.d/ -type f -exec file {} \; | egrep -i "script|shell"
+	 /etc/init.d/netconsole: Bourne-Again shell script, ASCII text executable, with very long lines
+	 /etc/init.d/network: Bourne-Again shell script, ASCII text executable
+
+	 # Using bash to detect if file is a valid bash script without executing the script, this shows addition
+	 # file '/etc/init.d/functions' that was missed by previous approach
+	 # Reference to run bash without executing: https://www.baeldung.com/linux/validate-bash-script
+	 $ find /etc/init.d/ -type f -exec bash -n {} 2>/dev/null \; -exec echo {} \;
+	 /etc/init.d/functions
+	 /etc/init.d/netconsole
+	 /etc/init.d/network
+
+Question 3: Is [] bracketed expression used in shell scripts under /etc/init.d? Write a cmd line to evaluate this.
+	 Another way to phrase the above question is below.
+	 Display all files in /etc/init.d which use []
+
+	 # Using 'egrep' with '-r' option to recurse into directory and '-l' to print only files with matches
+	 # We look for any occurance of literal open/close square bracket '[' or ']'. By using '\', we escape and
+	 # let 'egrep' treat them as literal and not treat it like a range operator
+	 $ egrep -l "\[|\]" -r /etc/init.d
+	 /etc/init.d/functions
+	 /etc/init.d/netconsole
+	 /etc/init.d/network
+
+	 # Since 'grep' does not support extended regular expression syntax, it does not treat '[' or ']' specially.
+	 # Hence, there is no need to escape them with a '\' (like done using 'egrep')
+	 $ grep -l "[|]" -r /etc/init.d
+	 /etc/init.d/functions
+	 /etc/init.d/netconsole
+	 /etc/init.d/network
+
+	 # Note: The above approaches will match any file that has '[' and/or ']'. Note, it does not check for matching
+	 open & close brackets.
+	 # If we want to find files with lines that have open & close square bracket in the same line. However, this
+	 # will not match files with multi-line expression with open and close bracket in separate lines
+	 $ egrep -l "\[.*\]" -r /etc/init.d
+	 /etc/init.d/functions
+	 /etc/init.d/netconsole
+	 /etc/init.d/network
