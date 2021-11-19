@@ -1,0 +1,100 @@
+Question 1: What is the difference between the . (ie the dot) char meaning for Shell globbing and . (ie the dot) char meaning for egrep?
+
+	 Shell globbing:
+	 * Dot is treated as a literal and is interpreted as a '.' character with no special meaning attached to it
+
+	 egrep:
+	 * egrep patterns are extended regular expressions. Regular expressions have a syntax and special meanings
+	 attached to certain characters when present in a pattern. Dot as in '.' (without the quotes) mean any
+	 character other than new line ('\n').
+
+Question 2: What is the different between [] and [[ ]] in shell ? Hint : alternate form of test cmd
+
+	 * '[]' and '[[ ]]' (without the quotes) are an alternate form of evaluating a conditions that can be
+	 otherwise evaluated using the 'test' Unix command.
+	 * These are implemented by shells and are part of the shell builtin functionality - you do not need a
+	 separate program like 'test' to evaluate a condition
+
+	 Differences:
+	 * '[[ ]]' is specific to BASH shell and not part of a standard (POSIX) followed by other Unix shells
+	 where as '[]' is part of a standard. POSIX standard compliant shells implement this form
+	 * '[[ ]]' does handles empty or non-existent variables where as '[]' gives an error
+	 * '[' (single open square bracket) is also available as an executable but '[[' is not present
+
+	 Examples showing differences (in bash shell):
+	 # Example 1: Attempt to test non-existent
+	 $ [ $x = "x" ]
+	 -bash: [: =: unary operator expected
+
+	 # Example 2: Attempt to test empty variable
+	 $ x=
+	 $ [ $x = "x" ]
+	 -bash: [: =: unary operator expected
+	 # Using double quotes will handle without error
+
+	 # Handle empty/non-existent variable using '[' syntax with enclosing double quotes
+	 $ [ "$x" = "x" ]
+	 $ echo $?
+	 1
+
+	 # Handle empty/non-existent variable using '[[ ]]' syntax without additional double quotes
+	 $ [[ $x = "x" ]]
+	 $ echo $?
+	 1
+
+	 # Example 3: Stand alone implementations (as against shell builtin)
+	 $ which [
+	 /usr/bin/[
+
+	 $ which [[
+	 /usr/bin/which: no [[ in (/opt/anaconda3/bin:/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/home/oracle/bin:/home/app/oracle/product/11.2.0/dbhome_1/bin:.:/home/student/krupadhruva/.local/bin:/home/student/krupadhruva/bin)
+
+	 External reference:
+	 * bash specific syntax and their POSIX equivalents:
+	   https://mywiki.wooledge.org/Bashism
+	 * POSIX shell specification for evaluating conditions:
+	   https://pubs.opengroup.org/onlinepubs/9699919799/utilities/test.html#tag_20_128
+	 * dash shell (POSIX compliant) not available on voyager:
+	   https://man7.org/linux/man-pages/man1/dash.1.html
+
+Question 3: Describe xargs with an example.
+
+	 Description of 'xargs':
+	 * It is a Unix command that acts as a filter to capture the output of the previous command in a Unix pipe
+	 and send it as command line options for another Unix command that immediately follows 'xargs'
+	 * It allows running Unix commands that do not behave as filter to still take part in a Unix pipe command
+	 chain
+	 * It can be used to position arguments anything in the executing command string. By default, it appends
+	 the input from previous command to the end of the command following 'xargs' in a Unix pipe
+	 * It also supports invoking the same command for each input (like a loop) along with
+	 support for parallel execution for each command
+
+	 Example 1: Make a non filter command take part in Unix pipe chain
+	 $ pwd
+	 /home/student/krupadhruva
+
+	 # Let us extract the path to parent of current working directory
+	 $ pwd | dirname
+	 dirname: missing operand
+	 Try 'dirname --help' for more information.
+
+	 # dirname is not a filter, let us use xargs to make it work in a Unix pipe chain
+	 $ pwd | xargs dirname
+	 /home/student
+
+	 Example 2: Alter the position of the input:
+	 $ echo $USER | xargs -I ARG1 echo "Hey ARG1, how are you doing today?"
+	 Hey krupadhruva, how are you doing today?
+
+	 Example 3: Run command on multiple inputs (similar to a 'for' loop in programming languages)
+	 # If we want to make a backup of multiple files using Unix command 'cp', we will have to
+	 # run 'cp' on each file since it can copy one file at a time. Without using any 'for' loop,
+	 # 'xargs' allows us to run a command for each input
+
+	 # Note: We are just echo'ing the command since we do not have permission to copy a file under '/etc'
+	 # Following command sends multiple file paths using 'echo' to 'xargs' in a Unix pipe chain
+	 # 'xargs' reads the input and splits the input using space (' ') as delimiter and invokes the command
+	 # 'echo cp {} {}.backup' by replacing '{}' with each input
+	 $ echo -n /etc/passwd /etc/group | xargs -d ' ' -i -n 1 echo cp {} {}.backup
+	 cp /etc/passwd /etc/passwd.backup
+	 cp /etc/group /etc/group.backup
