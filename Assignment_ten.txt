@@ -10,14 +10,14 @@ Question 1: Display lines that begin with upper case and end with lower case amo
 Question 2: Display shell programming scripts in  /etc/init.d
 
 	 # Using Unix command 'file' to detect the file type (misses files without shell interpreter in first line)
-	 $ find /etc/init.d/ -type f -exec file {} \; | egrep -i "script|shell"
+	 $ find /etc/init.d/ -type f -exec file '{}' \; | egrep -i "script|shell"
 	 /etc/init.d/netconsole: Bourne-Again shell script, ASCII text executable, with very long lines
 	 /etc/init.d/network: Bourne-Again shell script, ASCII text executable
 
 	 # Using bash to detect if file is a valid bash script without executing the script, this shows addition
 	 # file '/etc/init.d/functions' that was missed by previous approach
 	 # Reference to run bash without executing: https://www.baeldung.com/linux/validate-bash-script
-	 $ find /etc/init.d/ -type f -exec bash -n {} 2>/dev/null \; -exec echo {} \;
+	 $ find /etc/init.d/ -type f -exec bash -n '{}' 2>/dev/null \; -exec echo '{}' \;
 	 /etc/init.d/functions
 	 /etc/init.d/netconsole
 	 /etc/init.d/network
