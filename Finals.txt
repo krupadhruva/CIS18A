@@ -1,0 +1,116 @@
+Question 1: Evaluate the following and explain, (hint: find the syntax error and explain how to fix) (2 points)
+shellprompt$ test $MOVIE = "Potter"
+
+    * The above expression is using Unix command 'test' to test the equality of value stored in variable 'MOVIE' with a string literal "Potter"
+
+    # Evaluating the above expression
+    $ test $MOVIE = "Potter"
+    -bash: test: =: unary operator expected
+    $ echo $?
+    2
+
+    Reason for the error:
+    * We are dereferencing a variable named 'MOVIE' (without the quotes) and testing if the value stored in the variable equals (is) "Potter"
+    * Since the variable 'MOVIE' is not defined OR can have an empty value, Unix command 'test' fails in evaluating the expression
+
+    Fix to handle undefined OR empty variables:
+    * Enclose the variable dereferencing in matching double quotes
+    * Failure to find the variable will not fail and yield an empty value
+    * Since dereferencing variable is enclosed in matching double quotes, it yields an empty string
+
+    $ test "$MOVIE" = "Potter"
+    $ echo $?
+    1
+
+    * The above expression evaluation is equivalent to testing equality of an empty string "" with "Potter":
+    $ test "" = "Potter"
+    $ echo $?
+    1
+
+Question 2: Write egrep/grep reg expressions for the following (2 points)
+    a: To display lines that do begin with a digit character.
+
+    * A digit is anything between 0 to 9, in extended regular expression syntax, it is: '[0-9]'
+    * Since we are interested in lines beginning with a digit, we will use the regular expression placement meta '^'
+    * Combining the above 2 requirements, the extended regular expression to match lines starting with a digit: '^[0-9]'
+
+    # Line starting with alphabet
+    $ echo alpha0 | egrep '^[0-9]'
+    # No match
+    $ echo $?
+    1
+
+    # Line starting with a digit
+    $ echo 0alpha | egrep '^[0-9]'
+    0alpha
+    # Matches
+    $ echo $?
+    0
+
+    # Running against a file to find lines starting with a digit
+    $ egrep '^[0-9]' /etc/rpc
+    3270_mapper	100013
+
+    b: To display lines that END  with an upper case alphabet. (ie last char is upper case)
+
+    * An upper case alphabet is anything between A to Z, in extended regular expression syntax, it is: '[A-Z]'
+    * Since we are interested in lines ending with an upper case alphabet, we will use the regular expression placement meta '$'
+    * Combining the above 2 requirements, the extended regular expression to match lines ending with an upper case alphabet: '[A-Z]$'
+
+    # Line ending with lower case alphabet
+    $ echo alpha | egrep '[A-Z]$'
+    # No match
+    $ echo $?
+    1
+
+    # Line ending with an upper case alphabet
+    $ echo alphA | egrep '[A-Z]$'
+    alphA
+    # Matches
+    $ echo $?
+    0
+
+    # Running against a file to find lines ending with an upper case alphabet
+    $ egrep '[A-Z]$' /etc/logrotate.conf
+	    minsize 1M
+
+Question 3: Write ONE cmd line to redirect the output and error msgs, of "find /tmp" to $HOME/find.err. (2 points)
+
+    * Unix commands typically writes errors to standard error and that is denoted by file descriptor 2
+      (0 corresponds to standard input and 1 corresponds to standard output)
+    * To redirect all errors, we will have to redirect anything that gets written the standard error (2) to standard output (1)
+    * '>' is the redirector operator in a Unix shell
+    * We can redirect the command standard output to a file and redirect standard error th standard output. Since
+      standard output is redirecrted to a file, both standard output and standard error will go to a file
+    * Combining the above, we execute Unix command 'find' and redirect its standard error to file $HOME/find.err
+
+    $ find /tmp > $HOME/find.err 2>&1
+    # Check if there were errors in executing 'find' command, non zero implies there were errors
+    $ echo $?
+    1
+
+    # Check if the standard output and error are redirected to a file (does file exists and non zero file size)
+    $ test -s $HOME/find.err
+    $ echo $?
+    0
+
+
+    Note: The same can be done by redirecting standard error (2) to a file and redirecting standard output (1) to standard error (2)
+    $ find /tmp 2>$HOME/find.err 1>&2
+
+Question 4: Write shell globbing expression for the following. (4 points)
+    a. to echo filenames that have a digit character anywhere in its name in /dev/ directory
+
+    * Similar to extended regular expression range syntax, syntax for shell glob to capture any digit: '[0-9]'
+    * Wildcard '*' shell glob pattern means 0 or more occurance of any character
+    * Since digits can be anywhere in the file name, we use shell glob wildcard '*' on either side of the above pattern
+
+    $ echo /dev/*[0-9]*
+
+    b. to echo filenames in /bin that begin with lower case letter in the range m through n
+
+    * Similar to extended regular expression range syntax, syntax for shell glob to capture characters between m and n: '[m-n]'
+    * Since we want to capture any file name that starts with the above pattern, we are not interested in what follows the pattern
+    * Hence, we use a wildcard shell glob pattern '*' following the range pattern: '[m-n]*'
+
+    $ echo /bin/[m-n]*
